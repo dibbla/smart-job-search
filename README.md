@@ -12,4 +12,4 @@ Start Flask server with `python app.py`.
 - Put names here
 - Yinggan Xu
 - Minyi Sun
-- 
+- Chi Xu
