@@ -11,4 +11,5 @@ Start Flask server with `python app.py`.
 ## Team Members
 - Put names here
 - Yinggan Xu
+- Minyi Sun
 - 
