@@ -13,3 +13,4 @@ Start Flask server with `python app.py`.
 - Yinggan Xu
 - Minyi Sun
 - Chi Xu
+- Xingtong Yao
