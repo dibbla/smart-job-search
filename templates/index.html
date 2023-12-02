@@ -3,14 +3,17 @@
 <head>
     <title>Home</title>
 </head>
+
 <body>
     <h1>Home</h1>
     <p>Hello world!</p>
-    <a href="{{ url_for('jobs_overview') }}">View Jobs Overview</a>
-    <a href="{{ url_for('search_position') }}">Search Position</a>
-    <a href="{{ url_for('post_position') }}">Post Position</a>
-    <a href="{{ url_for('login') }}">Login</a>
-    <a href="{{ url_for('logout') }}">Logout</a>
-    <a href="{{ url_for('register') }}">Register</a>
+    <div>
+        <a href="/register_company">Register Company</a>
+        <a href="/register_hr">Register as HR</a>
+        <a href="/register_user">Register as User</a>
+        <br>
+        <a href="/login">Log-in</a>
+        <a href="/logout">Log-out</a>
+    </div>
 </body>
 </html>

@@ -1,0 +1,147 @@
+from flask import Blueprint, render_template, redirect, url_for, flash, session
+from werkzeug.security import generate_password_hash, check_password_hash
+
+from .forms import CompanyRegistrationForm, HRRegistrationForm, UserRegistrationForm, LoginForm
+from .models import db, Company, HR, User, Personal_Info
+
+main_routes = Blueprint('main_routes', __name__)
+# Main page
+@main_routes.route('/')
+def index():
+    return render_template('index.html')
+
+# Register page
+@main_routes.route('/register_company', methods=['GET', 'POST'])
+def register_company():
+    form = CompanyRegistrationForm()
+
+    if form.validate_on_submit():
+        # Check if the company already exists
+        existing_company = Company.query.filter_by(Company_ID=form.Company_ID.data).first()
+
+        if existing_company:
+            flash('Company ID already exists. Please provide a unique Company ID.', 'danger')
+        else:
+            # Register the new company
+            new_company = Company(
+                Company_ID=form.Company_ID.data,
+                Company_Name=form.Company_Name.data,
+                Company_Location=form.Company_Location.data,
+                Company_Description=form.Company_Description.data
+            )
+            db.session.add(new_company)
+            db.session.commit()
+
+            flash('Company registration successful.', 'success')
+            print('Company registration successful.')
+            return redirect(url_for('main_routes.index'))
+
+    return render_template('register_company.html', form=form)
+
+# Registration pages
+@main_routes.route('/register_hr', methods=['GET', 'POST'])
+def register_hr():
+    form = HRRegistrationForm()
+    if form.validate_on_submit():
+        # Check if the HR already exists
+        existing_hr = HR.query.filter_by(HR_Email=form.HR_Email.data).first()
+        if existing_hr:
+            flash('HR ID already exists. Please provide a unique HR Email.', 'danger')
+            print('HR ID already exists. Please provide a unique HR Email.')
+            return redirect(url_for('main_routes.register_hr'))
+        
+        # Check if the company exists
+        existing_company = Company.query.filter_by(Company_ID=form.Company_ID.data).first()
+        if not existing_company:
+            flash('Company ID does not exist. Please provide a valid Company ID.', 'danger')
+            print('Company ID does not exist. Please provide a valid Company ID.')
+            return redirect(url_for('main_routes.register_company'))
+        
+        hashed_password = generate_password_hash(form.HR_Password.data, method='pbkdf2:sha256', salt_length=8)
+
+        # generate a new HR id
+        new_hr = HR(
+            HR_Name=form.HR_Name.data,
+            HR_Email=form.HR_Email.data,
+            HR_Company_ID=form.Company_ID.data,
+            HR_Password=hashed_password
+        )
+        db.session.add(new_hr)
+        db.session.commit()
+        print('HR registration successful.\n', HR.query.all()) # debug
+        return redirect(url_for('main_routes.index'))
+
+    return render_template('register_hr.html', form=form)
+
+@main_routes.route('/register_user', methods=['GET', 'POST'])
+def register_user():
+    form = UserRegistrationForm()
+    if form.validate_on_submit():
+        # Check if the user already exists
+        existing_user = User.query.filter_by(User_Email=form.User_Email.data).first()
+        if existing_user:
+            flash('User ID already exists. Please provide a unique User Email.', 'danger')
+            print('User ID already exists. Please provide a unique User Email.')
+            return redirect(url_for('main_routes.register_user'))
+        
+        hashed_password = generate_password_hash(form.User_Password.data, method='pbkdf2:sha256', salt_length=8)
+
+        # generate a new User id for personal information
+        personal_info_id = len(User.query.all()) + 1
+        new_personal_info = Personal_Info(
+            Info_ID=personal_info_id,
+            Info_Salary=0
+        )
+        db.session.add(new_personal_info)
+        db.session.commit()
+
+        # add the new user
+        new_user = User(
+            User_Name=form.User_Name.data,
+            User_Email=form.User_Email.data,
+            User_Password=hashed_password,
+            User_Info_ID=personal_info_id
+        )
+        db.session.add(new_user)
+        db.session.commit()
+        print('User registration successful.\n', User.query.all())
+        return redirect(url_for('main_routes.index'))
+    
+    return render_template('register_user.html', form=form)
+
+# Login page
+@main_routes.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        print(form)
+        user = User.query.filter_by(User_Email=form.User_Email.data).first()
+        if user is None:
+            user = HR.query.filter_by(HR_Email=form.User_Email.data).first()
+        print(user)
+        if user and check_password_hash(user.User_Password, form.User_Password.data):
+            session['user_id'] = user.User_Email
+            session['user_type'] = 'user' if isinstance(user, User) else 'hr'
+            flash('Logged in successfully.', 'success')
+            print('Logged in successfully.')
+            return redirect(url_for('main_routes.index'))
+        else:
+            print('Logged in successfully.')
+            flash('Invalid email or password.', 'danger')
+    else:
+        print("Error:", form)
+    
+    return render_template('login.html', form=form)
+
+@main_routes.route('/logout')
+def logout():
+    if 'user_id' not in session:
+        flash('You are not logged in.', 'danger')
+        print('You are not logged in.')
+        return redirect(url_for('main_routes.login'))
+    # Clear user information from the session
+    session.pop('user_id', None)
+    session.pop('user_type', None)
+    flash('Logged out successfully.', 'success')
+    print('Logged out successfully.')
+    return redirect(url_for('main_routes.index'))

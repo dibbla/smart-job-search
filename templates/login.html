@@ -1,25 +1,15 @@
-<!-- login.html -->
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+  <title>Login</title>
 </head>
 <body>
-    <h1>Login</h1>
-    <!-- Your login form here -->
-    <form method="POST" action="{{ url_for('login') }}">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required><br>
-
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required><br>
-
-        <button type="submit">Login</button>
-    </form>
-
-
-    <p>Don't have an account? <a href="{{ url_for('register') }}">Register here</a>.</p>
+  <h1>Login</h1>
+  <form method="POST" action="{{ url_for('main_routes.login') }}">
+    {{ form.hidden_tag() }}
+    {{ form.User_Email.label }} {{ form.User_Email(size=32) }}<br>
+    {{ form.User_Password.label }} {{ form.User_Password(size=32) }}<br>
+    {{ form.submit() }}
+  </form>
 </body>
 </html>
