@@ -8,7 +8,7 @@ Start Flask server with `python app.py`.
 
 ## Description
 
-### Tables
+### Tables [Out-dated, see models.py for latest versions of Tables]
 - HR: stores HR information
   - HR_ID: primary key
   - HR_Name: name of HR
