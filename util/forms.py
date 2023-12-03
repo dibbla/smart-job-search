@@ -32,3 +32,9 @@ class LoginForm(FlaskForm):
     User_Email = StringField('Email', validators=[DataRequired(), Email()])
     User_Password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Login')
+
+class PostPositionForm(FlaskForm):
+    Job_Title = StringField('Job Title', validators=[DataRequired()])
+    Job_Description = TextAreaField('Job Description')
+    Job_Salary = StringField('Salary', validators=[DataRequired()])
+    Submit = SubmitField('Post Position')

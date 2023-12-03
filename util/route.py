@@ -1,14 +1,71 @@
+import uuid
 from flask import Blueprint, render_template, redirect, url_for, flash, session
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from .forms import CompanyRegistrationForm, HRRegistrationForm, UserRegistrationForm, LoginForm
-from .models import db, Company, HR, User, Personal_Info
+from .forms import CompanyRegistrationForm, HRRegistrationForm, UserRegistrationForm, LoginForm, \
+    PostPositionForm
+from .models import db, Company, HR, User, Personal_Info, Job
 
 main_routes = Blueprint('main_routes', __name__)
 # Main page
 @main_routes.route('/')
 def index():
     return render_template('index.html')
+
+# display all the jobs
+@main_routes.route('/jobs')
+def jobs():
+    jobs = Job.query.all()
+    print(jobs)
+    return render_template('jobs.html', jobs=jobs)
+
+# post position page
+@main_routes.route('/post_position', methods=['GET', 'POST'])
+def post_position():
+    # check user authentication
+    if 'user_id' not in session:
+        flash('You are not logged in.', 'danger')
+        print('You are not logged in.')
+        return redirect(url_for('main_routes.login'))
+    if session['user_type'] != 'hr':
+        flash('You are not a HR.', 'danger')
+        print('You are not a HR.')
+        return redirect(url_for('main_routes.index'))
+    
+    # get the HR information
+    hr = HR.query.filter_by(HR_Email=session['user_id']).first()
+    if hr is None:
+        flash('You are not logged in.', 'danger')
+        print('You are not logged in.')
+        return redirect(url_for('main_routes.login'))
+    
+    # get the company information
+    company = Company.query.filter_by(Company_ID=hr.HR_Company_ID).first()
+    if company is None:
+        flash('You are not logged in.', 'danger')
+        print('You are not logged in.')
+        return redirect(url_for('main_routes.login'))
+    
+    # post a job and add it to the database
+    form = PostPositionForm()
+    if form.validate_on_submit():
+        # create a job id with uuid
+        job_id = uuid.uuid4().int & (1<<32)-1
+        print(job_id)
+        new_job = Job(
+            Job_ID=job_id,
+            Job_Title=form.Job_Title.data,
+            Job_Description=form.Job_Description.data,
+            Job_Salary=form.Job_Salary.data,
+            Job_Company_ID=company.Company_ID,
+            Job_HR_Email=hr.HR_Email
+        )
+        db.session.add(new_job)
+        db.session.commit()
+        print('Job posted successfully.\n', Job.query.all())
+        return redirect(url_for('main_routes.index'))
+    
+    return render_template('post_position.html', form=form)
 
 # Register page
 @main_routes.route('/register_company', methods=['GET', 'POST'])
@@ -114,19 +171,28 @@ def register_user():
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        print(form)
         user = User.query.filter_by(User_Email=form.User_Email.data).first()
         if user is None:
             user = HR.query.filter_by(HR_Email=form.User_Email.data).first()
-        print(user)
-        if user and check_password_hash(user.User_Password, form.User_Password.data):
-            session['user_id'] = user.User_Email
-            session['user_type'] = 'user' if isinstance(user, User) else 'hr'
-            flash('Logged in successfully.', 'success')
-            print('Logged in successfully.')
-            return redirect(url_for('main_routes.index'))
+        print("User is:", user)
+        try:
+            if user and check_password_hash(user.User_Password, form.User_Password.data):
+                session['user_id'] = user.User_Email
+                session['user_type'] = 'user' if isinstance(user, User) else 'hr'
+                flash('Logged in successfully.', 'success')
+                print('Logged in successfully.')
+                return redirect(url_for('main_routes.index'))
+        except:
+            if user and check_password_hash(user.HR_Password, form.User_Password.data):
+                session['user_id'] = user.HR_Email
+                session['user_type'] = 'user' if isinstance(user, User) else 'hr'
+                flash('Logged in successfully.', 'success')
+                print('Logged in successfully.')
+                return redirect(url_for('main_routes.index'))
         else:
-            print('Logged in successfully.')
+            print(HR.query.all())
+            print(User.query.all())
+            print('Logged in NOT successfully.')
             flash('Invalid email or password.', 'danger')
     else:
         print("Error:", form)

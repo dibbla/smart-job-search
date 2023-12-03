@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Jobs</title>
+</head>
+<body>
+    <h1>Jobs</h1>
+    <ul>
+    {% for job in jobs %}
+        <div>{{ job.Job_Title }} - {{ job.Job_Description }}<br>
+            Job Salary: {{job.Job_Salary}}</div>
+    {% endfor %}
+    </ul>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Post Position</title>
+    <!-- Include any necessary stylesheets or scripts here -->
+</head>
+<body>
+    <form method="post" action="/post_position">
+        {{ form.hidden_tag() }}
+
+        <div class="form-group">
+            {{ form.Job_Title.label(class="form-label") }}
+            {{ form.Job_Title(class="form-control") }}
+        </div>
+
+        <div class="form-group">
+            {{ form.Job_Description.label(class="form-label") }}
+            {{ form.Job_Description(class="form-control") }}
+        </div>
+
+        <div class="form-group">
+            {{ form.Job_Salary.label(class="form-label") }}
+            {{ form.Job_Salary(class="form-control") }}
+        </div>
+        
+        <div class="form-group">
+            {{ form.Submit(class="btn btn-primary") }}
+        </div>
+    </form>
+    
+</body>
+</html>

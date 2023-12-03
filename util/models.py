@@ -38,3 +38,12 @@ class Personal_Info(db.Model):
     __tablename__ = 'personal_info'
     Info_ID = db.Column(db.Integer, primary_key=True)
     Info_Salary = db.Column(db.Integer, nullable=True)
+
+# Job table
+class Job(db.Model):
+    Job_ID = db.Column(db.Integer, primary_key=True)
+    Job_Title = db.Column(db.String(255), nullable=False)
+    Job_Description = db.Column(db.Text)
+    Job_Salary = db.Column(db.Integer, nullable=True)
+    Job_Company_ID = db.Column(db.Integer, db.ForeignKey('company.Company_ID'), nullable=False)
+    Job_HR_Email = db.Column(db.String(50), db.ForeignKey('hr.HR_Email'), nullable=False)
