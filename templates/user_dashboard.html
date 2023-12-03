@@ -6,16 +6,22 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard.css') }}">
+
 </head>
 <body>
+    <button id="home-link" onclick="window.location.href='/'">Home</button>
     <h2>User Dashboard</h2>
-    <p>Welcome, {{ user.User_Name }}!</p>
+    <div class="content-container">
+        <h3>Welcome, {{ session['user_id'] }}!</h3>
 
-    <h3>Your Applied Jobs:</h3>
-    <ul>
-        {% for job in user.applied_jobs %}
-            <li>{{ job.Job_Title }} - {{ job.Job_Description }} - Salary: {{ job.Job_Salary }}</li>
-        {% endfor %}
-    </ul>
+        <h4 style="color: rgb(53, 53, 53); text-align: left;">Your Applications:</h4>
+
+        <ul>
+            {% for job in user.applied_jobs %}
+                <li>{{ job.Job_Title }} - {{ job.Job_Description }} - Salary: {{ job.Job_Salary }}</li>
+            {% endfor %}
+        </ul>
+</div>
 </body>
 </html>

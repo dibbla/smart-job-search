@@ -6,22 +6,34 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HR Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard.css') }}">
 </head>
 <body>
+    <button id="home-link" onclick="window.location.href='/'">Home</button>
+    
     <h2>HR Dashboard</h2>
-    <p>Welcome, {{ session['user_id'] }}!</p>
+    <div class="content-container">
+        <h3>Welcome, {{ session['user_id'] }}!</h3>
 
-    <h3>Your Posted Jobs:</h3>
-    <ul>
-        <!-- Loop through jobs -->
-        {% for job in jobs %}
-            <li>
-                {{ job.Job_Title }} - {{ job.Job_Description }} - Salary: {{ job.Job_Salary }}
-                <!-- Link to delete job -->
-                <a href="/delete_job/{{ job.Job_ID }}">Delete</a>
-            </li>
-        {% endfor %}
-    </ul>
-    <a href="/post_position">Post Position</a>
+        <h4 style="color: rgb(53, 53, 53); text-align: left;">Your Posted Jobs:</h4>
+        <ul>
+            <!-- Loop through jobs -->
+            {% for job in jobs %}
+                <li>
+                    {{ job.Job_Title }} - {{ job.Job_Description }} - Salary: {{ job.Job_Salary }}
+                    <br>
+                    <br>
+                    <ul>
+                        <!-- Loop through applicants for the current job using the relationship -->
+                        {% for applicant in job.applicants_list %}
+                            <li class="applicants">{{ applicant.User_Name }} - {{ applicant.User_Email }}</li>
+                        {% endfor %}
+                    </ul>
+                    <a href="/delete_job/{{ job.Job_ID }}">Delete Position</a>
+                </li>
+            {% endfor %}
+        </ul>
+        <a href="/post_position">Post Position</a>
+    </div>
 </body>
 </html>
