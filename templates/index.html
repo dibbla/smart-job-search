@@ -1,21 +1,23 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='index_styles.css') }}">
 </head>
+<body class="center-content">
+    <button id="home-link" onclick="window.location.href='/'">Home</button>
 
-<body>
-    <h1>Home</h1>
-    <p>Hello world!</p>
-    <div>
-        <a href="/register_company">Register Company</a>
-        <a href="/register_hr">Register as HR</a>
-        <a href="/register_user">Register as User</a>
-        <a href="/jobs">Jobs</a>
-        <a href="/hr_dashboard">HR Dashboard</a>
-        <br>
-        <a href="/login">Log-in</a>
-        <a href="/logout">Log-out</a>
+    <div class="content">
+        <h1>Welcome! Smart Jobs System @CSC3170</h1>
+        <div class="links">
+            <a href="/register_company">Register Company</a>
+            <a href="/register_hr">Register as HR</a>
+            <a href="/register_user">Register as User</a>
+            <a href="/login">Log in</a>
+            <a href="/logout">Log out</a>
+        </div>
     </div>
 </body>
 </html>

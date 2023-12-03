@@ -4,9 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Registration</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='form_styles.css') }}">
     <!-- Include any necessary stylesheets or scripts here -->
 </head>
 <body>
+    <button id="home-link" onclick="window.location.href='/'">Home</button>
+
     <div>
         <h2>User Registration</h2>
         <form method="post" action="/register_user">

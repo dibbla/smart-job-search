@@ -1,0 +1,62 @@
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #f2f2f2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.center-content {
+    min-height: 100vh;
+}
+
+.content {
+    text-align: center;
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.links {
+    display: flex;
+    justify-content: center;
+}
+
+a {
+    text-decoration: none;
+    color: #0066cc;
+    padding: 10px 20px;
+    margin: 0 10px;
+    border: 1px solid #0066cc;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+a:hover {
+    background-color: #0066cc;
+    color: #fff;
+}
+
+/* Add this to your existing CSS file or create a new one for the component */
+#home-link {
+    position: fixed;
+    font-size: large;
+    top: 25px;
+    left: 25px;
+    text-decoration: none;
+    color: #333; /* Set the color as needed */
+    font-weight: bold;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+#home-link:hover {
+    color: #0066cc; /* Change the hover color as needed */
+}
