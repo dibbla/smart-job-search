@@ -1,0 +1,21 @@
+<!-- templates/user_dashboard.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+</head>
+<body>
+    <h2>User Dashboard</h2>
+    <p>Welcome, {{ user.User_Name }}!</p>
+
+    <h3>Your Applied Jobs:</h3>
+    <ul>
+        {% for job in user.applied_jobs %}
+            <li>{{ job.Job_Title }} - {{ job.Job_Description }} - Salary: {{ job.Job_Salary }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

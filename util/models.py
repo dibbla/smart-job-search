@@ -22,6 +22,9 @@ class User(db.Model, UserMixin):
     User_Name = db.Column(db.String(50), nullable=False)
     User_Password = db.Column(db.String(50), nullable=False)
     User_Info_ID = db.Column(db.Integer, db.ForeignKey('personal_info.Info_ID'), nullable=False)
+    applied_jobs = db.relationship('Job', secondary='job_application')
+
+
 
     def __repr__(self):
         return '<User %r>' % self.User_Email
@@ -47,3 +50,9 @@ class Job(db.Model):
     Job_Salary = db.Column(db.Integer, nullable=True)
     Job_Company_ID = db.Column(db.Integer, db.ForeignKey('company.Company_ID'), nullable=False)
     Job_HR_Email = db.Column(db.String(50), db.ForeignKey('hr.HR_Email'), nullable=False)
+    applicants_list = db.relationship('User', secondary='job_application')
+
+job_application = db.Table('job_application',
+    db.Column('job_id', db.Integer, db.ForeignKey('job.Job_ID')),
+    db.Column('user_email', db.String(50), db.ForeignKey('user.User_Email'))
+)

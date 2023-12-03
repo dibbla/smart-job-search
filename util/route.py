@@ -110,6 +110,42 @@ def post_position():
     
     return render_template('post_position.html', form=form)
 
+@main_routes.route('/apply_job/<int:job_id>')
+def apply_job(job_id):
+    # Check if the user is logged in
+    if 'user_id' not in session:
+        flash('You need to log in to apply for jobs.', 'danger')
+        return redirect(url_for('main_routes.login'))
+
+    # Get the user information
+    user = User.query.filter_by(User_Email=session['user_id']).first()
+
+    # Get the job to apply for
+    job = Job.query.get(job_id)
+
+    # Check if the user has already applied to this job
+    if job and user and job not in user.applied_jobs:
+        user.applied_jobs.append(job)
+        db.session.commit()
+        flash('Application submitted successfully.', 'success')
+    else:
+        flash('You have already applied to this job.', 'danger')
+
+    return redirect(url_for('main_routes.index'))
+
+@main_routes.route('/user_dashboard')
+def user_dashboard():
+    # Check if the user is logged in
+    if 'user_id' not in session and session['user_type'] != 'user':
+        flash('You need to log in to access the user dashboard.', 'danger')
+        return redirect(url_for('main_routes.login'))
+
+    # Get the user information
+    user = User.query.filter_by(User_Email=session['user_id']).first()
+
+    return render_template('user_dashboard.html', user=user)
+
+
 # Register page
 @main_routes.route('/register_company', methods=['GET', 'POST'])
 def register_company():

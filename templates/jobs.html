@@ -1,15 +1,21 @@
+<!-- templates/jobs.html -->
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Jobs</title>
+    <!-- ... (head content) -->
 </head>
 <body>
-    <h1>Jobs</h1>
+    <h2>All Jobs</h2>
+
     <ul>
-    {% for job in jobs %}
-        <div>{{ job.Job_Title }} - {{ job.Job_Description }}<br>
-            Job Salary: {{job.Job_Salary}}</div>
-    {% endfor %}
+        {% for job in jobs %}
+            <li>
+                {{ job.Job_Title }} - {{ job.Job_Description }} - Salary: {{ job.Job_Salary }}
+                {% if 'user_type' in session and session['user_type'] == 'user' %}
+                    <a href="{{ url_for('main_routes.apply_job', job_id=job.Job_ID) }}">Apply</a>
+                {% endif %}
+            </li>
+        {% endfor %}
     </ul>
 </body>
 </html>
