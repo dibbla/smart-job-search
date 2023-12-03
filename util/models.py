@@ -23,9 +23,7 @@ class User(db.Model, UserMixin):
     User_Password = db.Column(db.String(50), nullable=False)
     User_Info_ID = db.Column(db.Integer, db.ForeignKey('personal_info.Info_ID'), nullable=False)
     applied_jobs = db.relationship('Job', secondary='job_application')
-
-
-
+    
     def __repr__(self):
         return '<User %r>' % self.User_Email
     

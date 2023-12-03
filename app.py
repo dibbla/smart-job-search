@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template
+from flask import Flask, render_template, request, session
 from flask_sqlalchemy import SQLAlchemy
 from util.route import main_routes  # Import the routes from route.py
 from util.models import db, HR, User

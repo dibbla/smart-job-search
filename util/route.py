@@ -4,7 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 from .forms import CompanyRegistrationForm, HRRegistrationForm, UserRegistrationForm, LoginForm, \
     PostPositionForm
-from .models import db, Company, HR, User, Personal_Info, Job
+from .models import db, Company, HR, User, Personal_Info, Job, job_application
 
 main_routes = Blueprint('main_routes', __name__)
 # Main page
@@ -35,6 +35,13 @@ def hr_dashboard():
 
     # Get all jobs posted by the HR
     jobs = Job.query.filter_by(Job_HR_Email=hr.HR_Email).all()
+
+    # Create a dictionary to store applicants for each job
+    applicants_dict = {}
+
+    for job in jobs:
+        applicants = db.session.query(User).join(job_application).filter(job_application.c.job_id == job.Job_ID).all()
+        applicants_dict[job.Job_ID] = applicants
 
     return render_template('hr_dashboard.html', jobs=jobs)
 
@@ -136,7 +143,8 @@ def apply_job(job_id):
 @main_routes.route('/user_dashboard')
 def user_dashboard():
     # Check if the user is logged in
-    if 'user_id' not in session and session['user_type'] != 'user':
+    if 'user_id' not in session or session['user_type'] != 'user':
+        print('You are not logged in.')
         flash('You need to log in to access the user dashboard.', 'danger')
         return redirect(url_for('main_routes.login'))
 
@@ -144,7 +152,6 @@ def user_dashboard():
     user = User.query.filter_by(User_Email=session['user_id']).first()
 
     return render_template('user_dashboard.html', user=user)
-
 
 # Register page
 @main_routes.route('/register_company', methods=['GET', 'POST'])
