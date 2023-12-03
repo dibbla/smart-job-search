@@ -19,7 +19,50 @@ def jobs():
     print(jobs)
     return render_template('jobs.html', jobs=jobs)
 
-# post position page
+# dashboard page
+# In dash board, HR can see and delete the jobs posted by him/her
+# In dash board, user can see and apply the jobs
+@main_routes.route('/hr_dashboard')
+def hr_dashboard():
+    # Check if the user is logged in and is an HR
+    if 'user_id' not in session or session['user_type'] != 'hr':
+        flash('You are not authorized to access this page.', 'danger')
+        print('You are not authorized to access this page.')
+        return redirect(url_for('main_routes.index'))
+
+    # Get the HR information
+    hr = HR.query.filter_by(HR_Email=session['user_id']).first()
+
+    # Get all jobs posted by the HR
+    jobs = Job.query.filter_by(Job_HR_Email=hr.HR_Email).all()
+
+    return render_template('hr_dashboard.html', jobs=jobs)
+
+@main_routes.route('/delete_job/<int:job_id>')
+def delete_job(job_id):
+    # Check if the user is logged in and is an HR
+    if 'user_id' not in session or session['user_type'] != 'hr':
+        flash('You are not authorized to access this page.', 'danger')
+        return redirect(url_for('main_routes.index'))
+
+    # Get the HR information
+    hr = HR.query.filter_by(HR_Email=session['user_id']).first()
+
+    # Get the job to delete
+    job = Job.query.filter_by(Job_ID=job_id, Job_HR_Email=hr.HR_Email).first()
+
+    if job:
+        # Delete the job from the database
+        db.session.delete(job)
+        db.session.commit()
+        print('Job deleted successfully.\n', Job.query.all())
+        flash('Job deleted successfully.', 'success')
+    else:
+        print('Job not found or you do not have permission to delete it.')
+        flash('Job not found or you do not have permission to delete it.', 'danger')
+
+    return redirect(url_for('main_routes.hr_dashboard'))
+
 @main_routes.route('/post_position', methods=['GET', 'POST'])
 def post_position():
     # check user authentication
@@ -63,7 +106,7 @@ def post_position():
         db.session.add(new_job)
         db.session.commit()
         print('Job posted successfully.\n', Job.query.all())
-        return redirect(url_for('main_routes.index'))
+        return redirect(url_for('main_routes.hr_dashboard'))
     
     return render_template('post_position.html', form=form)
 
