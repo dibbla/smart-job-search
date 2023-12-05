@@ -117,6 +117,19 @@ def post_position():
     
     return render_template('post_position.html', form=form)
 
+# In your routes.py
+@main_routes.route('/view_personal_info/<string:user_email>')
+def view_personal_info(user_email):
+    # Fetch the user based on the provided email
+    user = User.query.filter_by(User_Email=user_email).first()
+
+    if user:
+        # Render a template to display the user's personal information
+        return render_template('view_personal_info.html', user=user)
+    else:
+        flash('User not found.', 'danger')
+        return redirect(url_for('main_routes.hr_dashboard'))
+
 @main_routes.route('/apply_job/<int:job_id>')
 def apply_job(job_id):
     # Check if the user is logged in

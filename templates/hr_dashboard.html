@@ -27,6 +27,7 @@
                         <!-- Loop through applicants for the current job using the relationship -->
                         {% for applicant in job.applicants_list %}
                             <li class="applicants">{{ applicant.User_Name }} - {{ applicant.User_Email }}</li>
+                            - <a href="{{ url_for('main_routes.view_personal_info', user_email=applicant.User_Email) }}">View Personal Info</a>
                         {% endfor %}
                     </ul>
                     <a href="/delete_job/{{ job.Job_ID }}">Delete Position</a>

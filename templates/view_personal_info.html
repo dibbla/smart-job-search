@@ -1,0 +1,30 @@
+<!-- view_personal_info.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Personal Information</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <button id="home-link" onclick="window.location.href='/'">Home</button>
+    
+    <h2>Personal Information</h2>
+    <div class="content-container">
+        <h3>User Details</h3>
+        <p><strong>Name:</strong> {{ user.User_Name }}</p>
+        <p><strong>Email:</strong> {{ user.User_Email }}</p>
+        
+        <!-- Check if user has associated personal_info -->
+        {% if user.personal_info %}
+            <p><strong>Education:</strong> {{ user.personal_info.Info_Education }}</p>
+            <p><strong>Experience (years):</strong> {{ user.personal_info.Info_Experience }}</p>
+            <p><strong>Skills:</strong> {{ user.personal_info.Info_Skills }}</p>
+        {% else %}
+            <p>No personal information available.</p>
+        {% endif %}
+    </div>
+</body>
+</html>
