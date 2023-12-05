@@ -7,6 +7,8 @@ from flask_login import LoginManager
 
 # Basic configuration
 app = Flask(__name__)
+app.config['TESTING'] = True
+app.config['WTF_CSRF_ENABLED'] = False  # Disable CSRF protection for testing
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + \
     os.path.join(os.path.abspath(os.path.dirname(__file__)), 'database/smart-job-search.db')
 app.config['SECRET_KEY'] = '10086'

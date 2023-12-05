@@ -12,12 +12,10 @@ main_routes = Blueprint('main_routes', __name__)
 # Main page
 @main_routes.route('/')
 def index():
+    print(HR.query.all())
+    print(User.query.all())
+    print(Company.query.all())
     return render_template('index.html')
-
-from flask import session
-
-from flask import session, render_template
-from .models import User, Personal_Info
 
 @main_routes.route('/smart_search', methods=['GET'])
 def smart_search():
@@ -312,6 +310,7 @@ def register_user():
     
     form = UserRegistrationForm()
     if form.validate_on_submit():
+        print(form.User_Name.data, form.User_Email.data, form.User_Password.data)
         # Check if the user already exists
         existing_user = User.query.filter_by(User_Email=form.User_Email.data).first()
         if existing_user:

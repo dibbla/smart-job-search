@@ -30,7 +30,7 @@ class User(db.Model, UserMixin):
     
 # Company table, Company can be created by Company Registration
 class Company(db.Model):
-    Company_ID = db.Column(db.Integer, primary_key=True)
+    Company_ID = db.Column(db.String(255), primary_key=True)
     Company_Name = db.Column(db.String(255), nullable=False)
     Company_Location = db.Column(db.String(255))
     Company_Description = db.Column(db.Text)
