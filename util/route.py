@@ -180,6 +180,7 @@ def update_personal_info():
 
     if request.method == 'POST':
         # Update the personal information based on the form data
+        personal_info.Info_Salary = request.form.get('salary')
         personal_info.Info_Education = request.form.get('education')
         personal_info.Info_Experience = request.form.get('experience')
         personal_info.Info_Skills = request.form.get('skills')
