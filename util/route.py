@@ -5,12 +5,40 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from .forms import CompanyRegistrationForm, HRRegistrationForm, UserRegistrationForm, LoginForm, \
     PostPositionForm
 from .models import db, Company, HR, User, Personal_Info, Job, job_application
+from. smart_search import perform_smart_search
 
 main_routes = Blueprint('main_routes', __name__)
+
 # Main page
 @main_routes.route('/')
 def index():
     return render_template('index.html')
+
+from flask import session
+
+from flask import session, render_template
+from .models import User, Personal_Info
+
+@main_routes.route('/smart_search', methods=['GET'])
+def smart_search():
+    # Check if the 'search' parameter is present
+    if 'search' in request.args:
+        # Perform the search logic
+        print("Search triggered!")
+
+        user_email = session.get('user_id')
+        user = User.query.filter_by(User_Email=user_email).first()
+
+        if user:
+            personal_info = Personal_Info.query.get(user.User_Info_ID)
+            
+            if personal_info:
+                print(f"User's Personal Info: {personal_info.Info_Salary}, \
+                      {personal_info.Info_Education}, {personal_info.Info_Experience}, \
+                        {personal_info.Info_Skills}") # debug
+
+
+    return render_template('smart_search.html')
 
 # display all the jobs
 @main_routes.route('/jobs')
@@ -151,7 +179,7 @@ def apply_job(job_id):
     else:
         flash('You have already applied to this job.', 'danger')
 
-    return redirect(url_for('main_routes.index'))
+    return redirect(url_for('main_routes.jobs'))
 
 @main_routes.route('/user_dashboard')
 def user_dashboard():
