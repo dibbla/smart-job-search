@@ -36,6 +36,13 @@ def smart_search():
                 print(f"User's Personal Info: {personal_info.Info_Salary}, \
                       {personal_info.Info_Education}, {personal_info.Info_Experience}, \
                         {personal_info.Info_Skills}") # debug
+            
+            # get all the job information
+            jobs = Job.query.all()
+            print(jobs, type(jobs))
+            print(jobs[0].Job_Title)
+
+            search_result = perform_smart_search(personal_info, jobs, max_result=5)
 
 
     return render_template('smart_search.html')
