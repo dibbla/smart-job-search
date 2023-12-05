@@ -1,5 +1,5 @@
 import uuid
-from flask import Blueprint, render_template, redirect, url_for, flash, session
+from flask import Blueprint, render_template, redirect, url_for, flash, session, request
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from .forms import CompanyRegistrationForm, HRRegistrationForm, UserRegistrationForm, LoginForm, \
@@ -152,6 +152,30 @@ def user_dashboard():
     user = User.query.filter_by(User_Email=session['user_id']).first()
 
     return render_template('user_dashboard.html', user=user)
+
+@main_routes.route('/update_personal_info', methods=['GET', 'POST'])
+def update_personal_info():
+    # Check if the user is logged in
+    if 'user_id' not in session or session['user_type'] != 'user':
+        flash('You need to log in to update personal information.', 'danger')
+        print('You need to log in to update personal information.')
+        return redirect(url_for('main_routes.login'))
+
+    # Get the user information
+    user = User.query.filter_by(User_Email=session['user_id']).first()
+    personal_info = Personal_Info.query.get(user.User_Info_ID)
+
+    if request.method == 'POST':
+        # Update the personal information based on the form data
+        personal_info.Info_Education = request.form.get('education')
+        personal_info.Info_Experience = request.form.get('experience')
+        personal_info.Info_Skills = request.form.get('skills')
+
+        # Commit changes to the database
+        db.session.commit()
+        flash('Personal information updated successfully.', 'success')
+
+    return render_template('update_personal_info.html', user=user, personal_info=personal_info)
 
 # Register page
 @main_routes.route('/register_company', methods=['GET', 'POST'])

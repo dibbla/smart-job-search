@@ -22,6 +22,8 @@
                 <li>{{ job.Job_Title }} - {{ job.Job_Description }} - Salary: {{ job.Job_Salary }}</li>
             {% endfor %}
         </ul>
+
+        <a href="{{ url_for('main_routes.update_personal_info') }}">Update Personal Information</a>
 </div>
 </body>
 </html>

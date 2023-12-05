@@ -38,7 +38,10 @@ class Company(db.Model):
 class Personal_Info(db.Model):
     __tablename__ = 'personal_info'
     Info_ID = db.Column(db.Integer, primary_key=True)
-    Info_Salary = db.Column(db.Integer, nullable=True)
+    Info_Salary = db.Column(db.Integer, nullable=True) # expected salary
+    Info_Education = db.Column(db.String(255), nullable=True) # education
+    Info_Experience = db.Column(db.Integer, nullable=True) # years of experience
+    Info_Skills = db.Column(db.String(1024), nullable=True) # skills
 
 # Job table
 class Job(db.Model):
