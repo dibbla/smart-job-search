@@ -20,17 +20,27 @@
             <!-- Loop through jobs -->
             {% for job in jobs %}
                 <li>
-                    {{ job.Job_Title }} - {{ job.Job_Description }} - Salary: {{ job.Job_Salary }}
+                    <h4>{{ job.Job_Title }}</h4>
+                    {{ job.Job_Description }}
+                    <br>
+                    <br>
+
+                    <b>Salary:</b> {{ job.Job_Salary }}
                     <br>
                     <br>
                     <ul>
                         <!-- Loop through applicants for the current job using the relationship -->
                         {% for applicant in job.applicants_list %}
-                            <li class="applicants">{{ applicant.User_Name }} - {{ applicant.User_Email }}</li>
-                            - <a href="{{ url_for('main_routes.view_personal_info', user_email=applicant.User_Email) }}">View Personal Info</a>
+                            <li class="applicants">
+                                <a class="view_info"  href="{{ url_for('main_routes.view_personal_info', user_email=applicant.User_Email) }}">
+                                    👀
+                                </a>
+                                {{ applicant.User_Name }} {{ applicant.User_Email }}
+                            </li> 
+                            <br>
                         {% endfor %}
                     </ul>
-                    <a href="/delete_job/{{ job.Job_ID }}">Delete Position</a>
+                    <a class="delete_job" href="/delete_job/{{ job.Job_ID }}">Delete Position</a>
                 </li>
             {% endfor %}
         </ul>

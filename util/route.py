@@ -365,6 +365,7 @@ def login():
                 session['user_type'] = 'user' if isinstance(user, User) else 'hr'
                 flash('Logged in successfully.', 'success')
                 print('Logged in successfully.')
+                print(session['user_id'], session['user_type'])
                 return redirect(url_for('main_routes.index'))
         except:
             if user and check_password_hash(user.HR_Password, form.User_Password.data):
@@ -372,6 +373,7 @@ def login():
                 session['user_type'] = 'user' if isinstance(user, User) else 'hr'
                 flash('Logged in successfully.', 'success')
                 print('Logged in successfully.')
+                print(session['user_id'], session['user_type'])
                 return redirect(url_for('main_routes.index'))
         else:
             print(HR.query.all())

@@ -3,9 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Post Position</title>
-    <!-- Include any necessary stylesheets or scripts here -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='form_styles.css') }}">
+
 </head>
 <body>
+    <button id="home-link" onclick="window.location.href='/'">Home</button>
+    <div class="container">
     <form method="post" action="/post_position">
         {{ form.hidden_tag() }}
 
@@ -27,7 +30,13 @@
         <div class="form-group">
             {{ form.Submit(class="btn btn-primary") }}
         </div>
+
+        
     </form>
+
+    <br>
+    <a href="{{ url_for('main_routes.hr_dashboard') }}">Back to Dashboard</a>
+    </div>
     
 </body>
 </html>

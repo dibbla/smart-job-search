@@ -12,7 +12,12 @@
             {% for job in jobs %}
                 <li class="job-item">
                     <div class="job-details" style="text-align: left;">
-                        {{ job.Job_Title }} - {{ job.Job_Description }} - Salary: {{ job.Job_Salary }}
+                        <h4>{{ job.Job_Title }}</h4>
+                        {{ job.Job_Description }}
+                        <br>
+                        <br>
+
+                        <b>Salary: </b>{{ job.Job_Salary }}
                     </div>
                     <div class="job-link" style="text-align: right;">
                         {% if 'user_type' in session and session['user_type'] == 'user' %}

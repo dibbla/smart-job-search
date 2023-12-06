@@ -43,6 +43,7 @@ ul {
 }
 
 li {
+    text-align: left;
     margin-bottom: 20px;
     padding: 15px;
     padding-bottom: 20px;
@@ -55,10 +56,11 @@ li {
 .applicants {
     text-align: left;
     padding: 8px;
-    padding-left: 15px;
+    padding-left: 1px;
     padding-right: 15px;
     font-size: 14px; /* Adjust the font size as needed */
     color: #424242; /* Adjust the color as needed */
+    height: 25px;
 }
 
 a {
@@ -74,6 +76,30 @@ a {
 a:hover {
     background-color: #0066cc;
     color: #fff;
+}
+
+.delete_job{
+
+    text-decoration: none;
+    color: #0066cc;
+    padding: 5px 10px;
+    margin: auto;
+    border: 1px solid #0066cc;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.view_info{
+    text-decoration: none;
+    color: #0066cc;
+    padding: 5px 10px;
+    margin: 0 10px;
+    border: none;
+}
+
+.view_info:hover{
+    font-size: large;
+    background-color: #fff;
 }
 
 #home-link {
