@@ -19,7 +19,15 @@
 
         <ul>
             {% for job in user.applied_jobs %}
-                <li>{{ job.Job_Title }} - {{ job.Job_Description }} - Salary: {{ job.Job_Salary }}</li>
+            <li>
+            <h4 style="margin-top: 2px;">{{ job.Job_Title }}</h4>
+            {{ job.Job_Description }}
+            <br>
+            <br>
+
+            <b>Salary:</b> {{ job.Job_Salary }}
+
+        </li>
             {% endfor %}
         </ul>
 
