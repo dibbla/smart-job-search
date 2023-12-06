@@ -47,6 +47,11 @@ ul {
     margin-right: 10px; /* Adjust margin as needed */
 }
 
+.company_link {
+    border: none;
+}
+
+
 .job-link {
     text-align: right;
     white-space: nowrap; /* Prevent the link from wrapping to the next line */

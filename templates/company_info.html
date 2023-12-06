@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='personal_info.css') }}">
+</head>
+<body>
+    <button id="home-link" onclick="window.location.href='/'">Home</button>
+    <div class="container">
+    <h2>Company Information</h2>
+        <div style=
+            "
+            text-align: left;
+            width: 400px;
+            background-color: #ffffff;
+            padding: 20px;
+            padding-top: 10px;
+            padding-left: 25px;
+            padding-right: 25px;
+            padding-bottom: 10px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);"
+        >
+            <h4>{{ company.Company_Name }}</h4>
+            <p><b>Location: </b>{{ company.Company_Location }}</p>
+            <p><b>Description: </b>
+                <br><br>{{ company.Company_Description }}</p>
+        </div>
+        <br>
+        <a href="{{ url_for('main_routes.jobs') }}">Back to Dashboard</a>
+    </div>
+    
+</body>
+</html>

@@ -49,8 +49,27 @@ def smart_search():
 @main_routes.route('/jobs')
 def jobs():
     jobs = Job.query.all()
-    print(jobs)
-    return render_template('jobs.html', jobs=jobs)
+
+    # Fetch company information for each job
+    job_data = []
+    for job in jobs:
+        company = Company.query.get(job.Job_Company_ID)
+        job_info = {
+            'job': job,
+            'company': company
+        }
+        job_data.append(job_info)
+
+    print(job_data)
+
+    return render_template('jobs.html', jobs=job_data)
+
+@main_routes.route('/company_info/<company_id>')
+def company_info(company_id):
+    # Fetch company information based on company_id
+    company = Company.query.get(company_id)
+
+    return render_template('company_info.html', company=company)
 
 # dashboard page
 # In dash board, HR can see and delete the jobs posted by him/her
