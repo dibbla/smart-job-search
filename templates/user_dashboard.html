@@ -13,7 +13,8 @@
     <button id="home-link" onclick="window.location.href='/'">Home</button>
     <h2>User Dashboard</h2>
     <div class="content-container">
-        <h3>Welcome, {{ session['user_id'] }}!</h3>
+        <h3>Welcome, {{ session['user_id'] }}!</h3> 
+        <a href="{{ url_for('main_routes.update_personal_info') }}">Update Personal Information</a>
 
         <h4 style="color: rgb(53, 53, 53); text-align: left;">Your Applications:</h4>
 
@@ -31,7 +32,7 @@
             {% endfor %}
         </ul>
 
-        <a href="{{ url_for('main_routes.update_personal_info') }}">Update Personal Information</a>
+        
 </div>
 </body>
 </html>

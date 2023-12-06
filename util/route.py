@@ -41,9 +41,49 @@ def smart_search():
             print(jobs[0].Job_Title)
 
             search_result = perform_smart_search(personal_info, jobs, max_result=5)
+            print("DEBUG: search_result in smart search", search_result)
 
+            # Convert the list to a string using a comma as a delimiter
+            search_result_str = ','.join(map(str, search_result))
+            return redirect(url_for('main_routes.smart_search_result', search_result=search_result_str))
 
     return render_template('smart_search.html')
+
+@main_routes.route('/smart_search_result', methods=['GET'])
+def smart_search_result():
+    # Check if the 'search_result' parameter is present
+    if 'search_result' in request.args:
+        # Perform the search logic
+        print("Search result triggered!")
+
+        search_result = request.args.get('search_result')
+        print("DEBUG: search_result", search_result, type(search_result))
+
+        # Parse the string back into a list using a comma as a delimiter
+        search_result = request.args.get('search_result').split(',')
+        # Convert the list elements back to integers
+        search_result = list(map(int, search_result))
+
+        print("DEBUG: search_result decoded", search_result, type(search_result))
+        
+        # search results is a list of job ids
+        job_data = []
+        for job_id in search_result:
+            print(job_id)
+            # query the job information
+            job = Job.query.get(job_id)
+            company = Company.query.get(job.Job_Company_ID)
+            job_info = {
+                'job': job,
+                'company': company
+            }
+            job_data.append(job_info)
+
+        print(job_data)
+
+        return render_template('smart_search_result.html', jobs=job_data)
+
+    return render_template('smart_search_result.html')
 
 # display all the jobs
 @main_routes.route('/jobs')

@@ -68,4 +68,4 @@ def dump_to_csv(file_name, data):
         dict_writer.writerows(data)
 
 # Example usage
-test(3, 2, 5)
+test(company_num=5, hr_num=8, user_num=5)

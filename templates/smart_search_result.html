@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard.css') }}">
+</head>
+<body>
+    <button id="home-link" onclick="window.location.href='/'">Home</button>
+
+    <h2>AI Suggested Jobs</h2>
+    <div class="content-container">
+        <ul>
+            {% for job_info in jobs %}
+                <li class="job-item">
+                    <div class="job-details" style="text-align: left;">
+                        <h4>{{ job_info['job'].Job_Title }}</h4>
+                        {{ job_info['job'].Job_Description }}
+                        <br>
+                        <br>
+
+                        <b>Salary:  </b>{{ job_info['job'].Job_Salary }}
+                        <br>
+                        <b>Company: </b><a class="company_link" href="{{ url_for('main_routes.company_info', company_id=job_info['job'].Job_Company_ID) }}">{{ job_info['company'].Company_Name }}</a>
+                        <style>
+                            .company_link {
+                                margin-left: auto;
+                                padding: 0%;
+                                border: none;
+                                color: #000000;
+                            }
+                            .company_link:hover {
+                                color: rgb(31, 117, 143);
+                                background-color: #f9f9f9;
+                            }
+                        </style>
+                    </div>
+                    <div class="job-link" style="text-align: right;">
+                        {% if 'user_type' in session and session['user_type'] == 'user' %}
+                            <a href="{{ url_for('main_routes.apply_job', job_id=job_info['job'].Job_ID) }}">Apply</a>
+                        {% endif %}
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
