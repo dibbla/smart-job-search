@@ -7,6 +7,17 @@ db = SQLAlchemy()
 # User tables
 # User tables all use the email as the primary key
 
+# Admin (Administrator) table
+class Admin(db.Model, UserMixin):
+    Admin_Email = db.Column(db.String(50), primary_key=True)
+    Admin_Name = db.Column(db.String(50), nullable=False)
+    Admin_Password = db.Column(db.String(50), nullable=False)
+    # Admin_Email = db.Column("admin@email.com", primary_key=True)
+    # Admin_Name = db.Column("admin", nullable=False)
+    # Admin_Password = db.Column("admin", nullable=False)
+    def __repr__(self):
+        return '<Admin %r>' % self.Admin_Name
+
 # HR (Human Resource) table
 class HR(db.Model, UserMixin):
     HR_Email = db.Column(db.String(50), primary_key=True)
@@ -43,6 +54,8 @@ class Personal_Info(db.Model):
     Info_Education = db.Column(db.String(255), nullable=True) # education
     Info_Experience = db.Column(db.Integer, nullable=True) # years of experience
     Info_Skills = db.Column(db.String(1024), nullable=True) # skills
+    def __repr__(self):
+        return f"Info ID: {self.Info_ID} Salary: {self.Info_Salary}"
 
 # Job table
 class Job(db.Model):

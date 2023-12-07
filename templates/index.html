@@ -23,10 +23,16 @@
                 <a href="/hr_dashboard">Dashboard</a>
                 <a href="/logout">Log Out</a>
             {% endif %}
+            {% if 'user_type' in session and session['user_type'] == 'admin' %}
+                <!-- <a href="/jobs">Jobs</a> -->
+                <a href="/admin_dashboard">Dashboard</a>
+                <a href="/logout">Log Out</a>
+            {% endif %}
             {% if 'user_type'  not in session%}
                 <a href="/register_company">Register Company</a>
                 <a href="/register_hr">Register as HR</a>
                 <a href="/register_user">Register as User</a>
+                <a href="/register_admin">Register as Admin</a>
                 <a href="/login">Log in</a>
             {% endif %}
         </div>

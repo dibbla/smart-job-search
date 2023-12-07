@@ -38,3 +38,10 @@ class PostPositionForm(FlaskForm):
     Job_Description = TextAreaField('Job Description')
     Job_Salary = StringField('Salary', validators=[DataRequired()])
     Submit = SubmitField('Post Position')
+
+class AdminRegistrationForm(FlaskForm):
+    Admin_Name = StringField('Name', validators=[DataRequired()])
+    Admin_Email = StringField('Email', validators=[DataRequired(), Email()])
+    Admin_Password = PasswordField('Password', validators=[DataRequired()])
+    Confirm_Password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('Admin_Password')])
+    Submit = SubmitField('Register')

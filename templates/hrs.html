@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='admin_info_list.css') }}">
+</head>
+<body>
+    <button id="home-link" onclick="window.location.href='/'">Home</button>
+    <a href="{{ url_for('main_routes.admin_dashboard') }}">Back</a>
+
+    <h2>All HRs</h2>
+    <div class="content-container">
+        <ol>
+            {% for hr_info in hrs %}
+                <!-- <li class="hr-item"> -->
+                <li>
+                    <div class="hr-item" style="text-align: left;">
+                        <h4>{{ hr_info['hr'].HR_Name }}</h4>
+                        <!-- {{ hr_info['company'].Company_ID }} -->
+                        {{ hr_info['company'].Company_Name}}
+                        <a href="{{ url_for('main_routes.admin_hr_jobs', hr_email=hr_info['hr'].HR_Email)}}">Jobs</a>
+                        <!-- <br> -->
+                        {% if 'user_type' in session and session['user_type'] == 'admin' %}
+                        <a href="{{ url_for('main_routes.delete_hr', hr_email=hr_info['hr'].HR_Email) }}">Delete</a>
+                        {% endif %}
+                    </div>
+                </li>
+            {% endfor %}
+        </ol>
+    </div>
+</body>
+</html>

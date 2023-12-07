@@ -1,0 +1,28 @@
+<!-- admin_dashboard.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrator Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard.css') }}">
+</head>
+<body>
+    <button id="home-link" onclick="window.location.href='/'">Home</button>
+    
+    <h2>Administrator Dashboard</h2>
+    <div class="content-container">
+        <h3>Welcome, {{ session['user_id'] }}!</h3> 
+        <p><a href="/users" class="admin-user-link">Users</a></p>
+
+        <br>
+
+        <p><a href="/hrs" class="admin-hr-link">HRs</a></p>
+
+        <br>
+
+        <p><a href="/companies" class="admin-company-link">Companies</a></p>
+    </div>
+</body>
+</html>
