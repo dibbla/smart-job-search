@@ -15,6 +15,7 @@ def index():
     print(HR.query.all())
     print(User.query.all())
     print(Company.query.all())
+    print(Admin.query.all())
     return render_template('index.html')
 
 @main_routes.route('/smart_search', methods=['GET'])
@@ -492,7 +493,7 @@ def register_admin():
     form = AdminRegistrationForm()
     if form.validate_on_submit():
         # Check if the admin already exists
-        existing_admin = Admin.query.filter_by(Admin_Email=form.Admin_Email.data).first()
+        existing_admin = is_email_conflict(form.Admin_Email.data)
 
         if existing_admin:
             flash('Admin email already exists. Please provide a unique Admin Email.', 'danger')
@@ -528,17 +529,10 @@ def register_hr():
     form = HRRegistrationForm()
     if form.validate_on_submit():
         # Check if the HR already exists
-        existing_hr = HR.query.filter_by(HR_Email=form.HR_Email.data).first()
+        existing_hr = is_email_conflict(form.HR_Email.data)
         if existing_hr:
-            flash('HR ID already exists. Please provide a unique HR Email.', 'danger')
-            print('HR ID already exists. Please provide a unique HR Email.')
-            return redirect(url_for('main_routes.register_hr'))
-        
-        # Check if the user already exists
-        existing_user = User.query.filter_by(User_Email=form.HR_Email.data).first()
-        if existing_user:
-            flash('HR ID already exists. Please provide a unique HR Email.', 'danger')
-            print('HR ID already exists. Please provide a unique HR Email.')
+            flash('HR email already exists. Please provide a unique HR Email.', 'danger')
+            print('HR email already exists. Please provide a unique HR Email.')
             return redirect(url_for('main_routes.register_hr'))
 
         # Check if the company exists
@@ -576,17 +570,11 @@ def register_user():
     if form.validate_on_submit():
         print(form.User_Name.data, form.User_Email.data, form.User_Password.data)
         # Check if the user already exists
-        existing_user = User.query.filter_by(User_Email=form.User_Email.data).first()
+        existing_user = is_email_conflict(form.User_Email.data)
+
         if existing_user:
-            flash('User ID already exists. Please provide a unique User Email.', 'danger')
-            print('User ID already exists. Please provide a unique User Email.')
-            return redirect(url_for('main_routes.register_user'))
-        
-        # check if the HR already exists
-        existing_hr = HR.query.filter_by(HR_Email=form.User_Email.data).first()
-        if existing_hr:
-            flash('User ID already exists. Please provide a unique User Email.', 'danger')
-            print('User ID already exists. Please provide a unique User Email.')
+            flash('User email already exists. Please provide a unique User Email.', 'danger')
+            print('User email already exists. Please provide a unique User Email.')
             return redirect(url_for('main_routes.register_user'))
         
         hashed_password = generate_password_hash(form.User_Password.data, method='pbkdf2:sha256', salt_length=8)
@@ -672,3 +660,17 @@ def logout():
     flash('Logged out successfully.', 'success')
     print('Logged out successfully.')
     return redirect(url_for('main_routes.index'))
+
+# regitser email conflict check
+def is_email_conflict(User_Email):
+    # check if the email is already registered
+    existing_user = User.query.filter_by(User_Email=User_Email).first()
+    if existing_user:
+        return True
+    existing_hr = HR.query.filter_by(HR_Email=User_Email).first()
+    if existing_hr:
+        return True
+    existing_admin = Admin.query.filter_by(Admin_Email=User_Email).first()
+    if existing_admin:
+        return True
+    return False
