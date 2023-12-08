@@ -2,9 +2,9 @@ import uuid
 from flask import Blueprint, render_template, redirect, url_for, flash, session, request
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from .forms import CompanyRegistrationForm, HRRegistrationForm, UserRegistrationForm, LoginForm, \
+from .forms import CompanyRegistrationForm, HRRegistrationForm, UserRegistrationForm, AdminRegistrationForm, LoginForm, \
     PostPositionForm
-from .models import db, Company, HR, User, Personal_Info, Job, job_application
+from .models import db, Company, Admin, HR, User, Personal_Info, Job, job_application
 from. smart_search import perform_smart_search
 
 main_routes = Blueprint('main_routes', __name__)
@@ -104,6 +104,25 @@ def jobs():
 
     return render_template('jobs.html', jobs=job_data)
 
+# display all the jobs
+@main_routes.route('/admin_hr_jobs/<string:hr_email>')
+def admin_hr_jobs(hr_email):
+    jobs = Job.query.filter_by(Job_HR_Email=hr_email).all() 
+
+    # Fetch company information for each job
+    job_data = []
+    for job in jobs:
+        company = Company.query.get(job.Job_Company_ID)
+        job_info = {
+            'job': job,
+            'company': company
+        }
+        job_data.append(job_info)
+
+    print(job_data)
+
+    return render_template('admin_hr_jobs.html', jobs=job_data)
+
 @main_routes.route('/company_info/<company_id>')
 def company_info(company_id):
     # Fetch company information based on company_id
@@ -111,13 +130,163 @@ def company_info(company_id):
 
     return render_template('company_info.html', company=company)
 
+@main_routes.route('/admin_company_info/<company_id>')
+def admin_company_info(company_id):
+    # Fetch company information based on company_id
+    company = Company.query.get(company_id)
+
+    return render_template('admin_company_info.html', company=company)
+
+# Admin Dashboard
+@main_routes.route('/admin_dashboard')
+def admin_dashboard():
+    # Check if the user is logged in
+    if 'user_id' not in session or session['user_type'] != 'admin':
+        print('You are not logged in.')
+        flash('You need to log in to access the user dashboard.', 'danger')
+        return redirect(url_for('main_routes.login'))
+    
+    return render_template('admin_dashboard.html')
+
+# display all the users
+@main_routes.route('/users')
+def users():
+    users = User.query.all()
+
+    # Fetch basic info for each user
+    user_data = []
+    for user in users:
+        user_info = {
+            'user': user
+        }
+        user_data.append(user_info)
+    print(user_data)
+    return render_template('users.html', users = user_data)
+
+# display all the hrs
+@main_routes.route('/hrs')
+def hrs():
+    hrs = HR.query.all()
+
+    # Fetch basic info for each user
+    hr_data = []
+    for hr in hrs:
+        company = Company.query.get(hr.HR_Company_ID)
+        hr_info = {
+            'hr': hr,
+            'company': company
+        }
+        hr_data.append(hr_info)
+    print(hr_data)
+    return render_template('hrs.html', hrs = hr_data)
+
+# display all the companies
+@main_routes.route('/companies')
+def companies():
+    companies = Company.query.all()
+
+    # Fetch basic info for each user
+    company_data = []
+    for company in companies:
+        # company_info = {
+        #     'name': company.Company_Name,
+        #     'location': company.Company_Location,
+        #     'description': company.Company_Description
+        # }
+        company_data.append(company)
+    # print(company_data)
+    return render_template('companies.html', companies = company_data)
+
+@main_routes.route('/delete_user/<string:user_email>')
+def delete_user(user_email):
+    # Check if the user is logged in and is an admin
+    if 'user_id' not in session or session['user_type'] != 'admin':
+        flash('You are not authorized to access this page.', 'danger')
+        return redirect(url_for('main_routes.index'))
+
+    # Get the User to delete
+    # job = Job.query.filter_by(Job_ID=job_id, Job_HR_Email=hr.HR_Email).first()
+    user = User.query.filter_by(User_Email=user_email).first()
+
+    if user:
+        # Delete the job from the database
+        db.session.delete(user)
+        db.session.commit()
+        print('User deleted successfully.\n', User.query.all())
+        flash('User deleted successfully.', 'success')
+    else:
+        print('User not found or you do not have permission to delete it.')
+        flash('User not found or you do not have permission to delete it.', 'danger')
+
+    return redirect(url_for('main_routes.users'))
+
+@main_routes.route('/delete_hr/<string:hr_email>')
+def delete_hr(hr_email):
+    # Check if the user is logged in and is an admin
+    if 'user_id' not in session or session['user_type'] != 'admin':
+        flash('You are not authorized to access this page.', 'danger')
+        return redirect(url_for('main_routes.index'))
+
+    # Get the User to delete
+    # job = Job.query.filter_by(Job_ID=job_id, Job_HR_Email=hr.HR_Email).first()
+    hr = HR.query.filter_by(HR_Email=hr_email).first()
+
+    if hr:
+        # Delete all the job posted by this hr from the database
+        # Get all jobs posted by the HR
+        jobs = Job.query.filter_by(Job_HR_Email=hr_email).all()  
+        for job in jobs:
+            db.session.delete(job)
+            db.session.commit()
+        db.session.delete(hr)
+        db.session.commit()
+        print('HR deleted successfully.\n', HR.query.all())
+        flash('HR deleted successfully.', 'success')
+    else:
+        print('HR not found or you do not have permission to delete it.')
+        flash('HR not found or you do not have permission to delete it.', 'danger')
+
+    return redirect(url_for('main_routes.hrs'))
+
+@main_routes.route('/delete_company/<string:company_id>')
+def delete_company(company_id):
+    # Check if the user is logged in and is an admin
+    if 'user_id' not in session or session['user_type'] != 'admin':
+        flash('You are not authorized to access this page.', 'danger')
+        return redirect(url_for('main_routes.index'))
+
+    # Get the Company to delete
+    # job = Job.query.filter_by(Job_ID=job_id, Job_HR_Email=hr.HR_Email).first()
+    company = Company.query.filter_by(Company_ID=company_id).first()
+
+    if company:
+        # Delete all the HRs work for this company from the database
+        hrs = HR.query.filter_by(HR_Company_ID=company_id).all()
+        for hr in hrs:
+            # Delete all jobs posted by the HR
+            jobs = Job.query.filter_by(Job_HR_Email=hr.HR_Email).all()  
+            for job in jobs:
+                db.session.delete(job)
+                db.session.commit()
+            db.session.delete(hr)
+            db.session.commit()
+        db.session.delete(company)
+        db.session.commit()
+        print('Company deleted successfully.\n', Company.query.all())
+        flash('Company deleted successfully.', 'success')
+    else:
+        print('Company not found or you do not have permission to delete it.')
+        flash('Company not found or you do not have permission to delete it.', 'danger')
+
+    return redirect(url_for('main_routes.companies'))
+
 # dashboard page
 # In dash board, HR can see and delete the jobs posted by him/her
 # In dash board, user can see and apply the jobs
 @main_routes.route('/hr_dashboard')
 def hr_dashboard():
     # Check if the user is logged in and is an HR
-    if 'user_id' not in session or session['user_type'] != 'hr':
+    if 'user_id' not in session or session['user_type'] != 'hr' or session['user_type'] != 'admin':
         flash('You are not authorized to access this page.', 'danger')
         print('You are not authorized to access this page.')
         return redirect(url_for('main_routes.index'))
@@ -248,7 +417,7 @@ def apply_job(job_id):
 @main_routes.route('/user_dashboard')
 def user_dashboard():
     # Check if the user is logged in
-    if 'user_id' not in session or session['user_type'] != 'user':
+    if 'user_id' not in session or session['user_type'] != 'user' or session['user_type']!= 'admin':
         print('You are not logged in.')
         flash('You need to log in to access the user dashboard.', 'danger')
         return redirect(url_for('main_routes.login'))
@@ -310,6 +479,42 @@ def register_company():
             return redirect(url_for('main_routes.index'))
 
     return render_template('register_company.html', form=form)
+
+# Register page
+@main_routes.route('/register_admin', methods=['GET', 'POST'])
+def register_admin():
+    # loggin check
+    if 'user_id' in session:
+        flash('You are already logged in.', 'danger')
+        print('You are already logged in.')
+        return redirect(url_for('main_routes.index'))
+    
+    form = AdminRegistrationForm()
+    if form.validate_on_submit():
+        # Check if the admin already exists
+        existing_admin = Admin.query.filter_by(Admin_Email=form.Admin_Email.data).first()
+
+        if existing_admin:
+            flash('Admin email already exists. Please provide a unique Admin Email.', 'danger')
+            print('Admin email already exists. Please provide a unique Admin Email.')
+            return redirect(url_for('main_routes.index'))
+        else:
+            # Register the new admin
+            hashed_password = generate_password_hash(form.Admin_Password.data, method='pbkdf2:sha256', salt_length=8)
+            print("New admin...")
+            new_admin = Admin(
+                Admin_Email=form.Admin_Email.data,
+                Admin_Name=form.Admin_Name.data,
+                Admin_Password=hashed_password
+            )
+            db.session.add(new_admin)
+            db.session.commit()
+
+            flash('Admin registration successful.', 'success')
+            print('Admin registration successful.')
+            return redirect(url_for('main_routes.index'))
+    flash('Admin Invalid submit')
+    return render_template('register_admin.html', form=form)
 
 # Registration pages
 @main_routes.route('/register_hr', methods=['GET', 'POST'])
@@ -417,7 +622,18 @@ def login():
         user = User.query.filter_by(User_Email=form.User_Email.data).first()
         if user is None:
             user = HR.query.filter_by(HR_Email=form.User_Email.data).first()
+            if user is None:
+                user = Admin.query.filter_by(Admin_Email=form.User_Email.data).first()
         print("User is:", user)
+        if user and isinstance(user, Admin):
+            if check_password_hash(user.Admin_Password, form.User_Password.data):
+                session['user_id'] = user.Admin_Email
+                session['user_type'] = 'admin'
+                flash('Logged in successfully.', 'success')
+                print('Logged in successfully.')
+                print(session['user_id'], session['user_type'])
+                return redirect(url_for('main_routes.index'))          
+
         try:
             if user and check_password_hash(user.User_Password, form.User_Password.data):
                 session['user_id'] = user.User_Email

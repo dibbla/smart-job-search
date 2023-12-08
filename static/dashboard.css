@@ -118,3 +118,54 @@ a:hover {
 #home-link:hover {
     color: #0066cc;
 }
+
+#admin-hr-link {
+    position: fixed;
+    font-size: large;
+    top: 75px;
+    left: 75px;
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+#admin-hr-link:hover {
+    color: #0066cc;
+}
+
+#admin-user-link {
+    position: fixed;
+    font-size: large;
+    top: 110px;
+    left: 75px;
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+#admin-user-link:hover {
+    color: #0066cc;
+}
+
+#admin-company-link {
+    position: fixed;
+    font-size: large;
+    top: 145px;
+    left: 75px;
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+#admin-company-link:hover {
+    color: #0066cc;
+}

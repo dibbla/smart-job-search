@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Registration</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='form_styles.css') }}">
+</head>
+<body>
+    <button id="home-link" onclick="window.location.href='/'">Home</button>
+    <div>
+        <h2>Admin Registration</h2>
+        <form method="post" action="/register_admin">
+            {{ form.hidden_tag() }}
+
+            <div class="form-group">
+                {{ form.Admin_Name.label(class="form-label") }}
+                {{ form.Admin_Name(class="form-control") }}
+            </div>
+
+            <div class="form-group">
+                {{ form.Admin_Email.label(class="form-label") }}
+                {{ form.Admin_Email(class="form-control") }}
+            </div>
+
+
+            <div class="form-group">
+                {{ form.Admin_Password.label(class="form-label") }}
+                {{ form.Admin_Password(class="form-control") }}
+            </div>
+
+            <div class="form-group">
+                {{ form.Confirm_Password.label(class="form-label") }}
+                {{ form.Confirm_Password(class="form-control") }}
+            </div>
+
+            <div class="form-group">
+                {{ form.Submit(class="btn btn-primary") }}
+            </div>
+        </form>
+    </div>
+</body>
+</html>
