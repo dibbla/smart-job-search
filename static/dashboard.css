@@ -18,23 +18,11 @@ body {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     text-align: center;
     margin-bottom: 20px;
-    width: 500px;
 }
 
 h2 {
-    text-align: left;
     color: #333;
     margin-bottom: 20px;
-}
-
-p {
-    color: #666;
-}
-
-h3 {
-    text-align: left;
-    color: #333;
-    margin-top: 5px;
 }
 
 ul {
@@ -42,14 +30,15 @@ ul {
     padding: 0;
 }
 
-li {
-    text-align: left;
+.user-item {
     margin-bottom: 20px;
     padding: 15px;
-    padding-bottom: 20px;
     border: 1px solid #ddd;
     border-radius: 8px;
     background-color: #f9f9f9;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 /* Style for inner list items with class "applicants" */
@@ -63,11 +52,61 @@ li {
     height: 25px;
 }
 
+.delete_user{
+/*下面一行我加的*/
+    display: inline-block; /* Display the buttons in a line */
+    text-decoration: none;
+    color: #fff;
+    background-color: #0066cc;
+    padding: 5px 10px;
+    margin: 0.5px; /*我改过，原本是auto*/
+    border: 1px solid #0066cc;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.hr-item {
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.company-item {
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.job-details {
+    text-align: left;
+    flex-grow: 1;
+    margin-right: 10px; /* Adjust margin as needed */
+}
+
+.company_link {
+    border: none;
+}
+
+
+.job-link {
+    text-align: right;
+    white-space: nowrap; /* Prevent the link from wrapping to the next line */
+}
+
 a {
     text-decoration: none;
     color: #0066cc;
     padding: 5px 10px;
-    margin: 0 10px;
     border: 1px solid #0066cc;
     border-radius: 5px;
     transition: background-color 0.3s, color 0.3s;
@@ -76,30 +115,6 @@ a {
 a:hover {
     background-color: #0066cc;
     color: #fff;
-}
-
-.delete_job{
-
-    text-decoration: none;
-    color: #0066cc;
-    padding: 5px 10px;
-    margin: auto;
-    border: 1px solid #0066cc;
-    border-radius: 5px;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-.view_info{
-    text-decoration: none;
-    color: #0066cc;
-    padding: 5px 10px;
-    margin: 0 10px;
-    border: none;
-}
-
-.view_info:hover{
-    font-size: large;
-    background-color: #fff;
 }
 
 #home-link {
@@ -116,56 +131,5 @@ a:hover {
 }
 
 #home-link:hover {
-    color: #0066cc;
-}
-
-#admin-hr-link {
-    position: fixed;
-    font-size: large;
-    top: 75px;
-    left: 75px;
-    text-decoration: none;
-    color: #333;
-    font-weight: bold;
-    background: none;
-    border: none;
-    cursor: pointer;
-}
-
-#admin-hr-link:hover {
-    color: #0066cc;
-}
-
-#admin-user-link {
-    position: fixed;
-    font-size: large;
-    top: 110px;
-    left: 75px;
-    text-decoration: none;
-    color: #333;
-    font-weight: bold;
-    background: none;
-    border: none;
-    cursor: pointer;
-}
-
-#admin-user-link:hover {
-    color: #0066cc;
-}
-
-#admin-company-link {
-    position: fixed;
-    font-size: large;
-    top: 145px;
-    left: 75px;
-    text-decoration: none;
-    color: #333;
-    font-weight: bold;
-    background: none;
-    border: none;
-    cursor: pointer;
-}
-
-#admin-company-link:hover {
     color: #0066cc;
 }
