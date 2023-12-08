@@ -1,3 +1,4 @@
+
 <!-- admin_dashboard.html -->
 <!DOCTYPE html>
 <html lang="en">
@@ -10,10 +11,17 @@
 </head>
 <body>
     <button id="home-link" onclick="window.location.href='/'">Home</button>
-    
+
     <h2>Administrator Dashboard</h2>
-    <div class="content-container">
-        <h3>Welcome, {{ session['user_id'] }}!</h3> 
+    <div class="content-container" style="
+        height: 350px;
+        width: 500px;">
+
+    <img src="{{ url_for('static', filename='admin.png') }}" alt="adminIcon" style="width: 20%; height: auto;">
+
+        <h3 style="
+            height: 35px;
+        ">Welcome, {{ session['user_id'] }}!</h3> 
         <p><a href="/users" class="admin-user-link">Users</a></p>
 
         <br>

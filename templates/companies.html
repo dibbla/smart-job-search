@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,7 +9,12 @@
     <a href="{{ url_for('main_routes.admin_dashboard') }}">Back</a>
 
     <h2>All Companies</h2>
-    <div class="content-container">
+    <div class="content-container" style="
+        height: 700px;
+        width: 450px;">
+
+        <img src="{{ url_for('static', filename='company.png') }}" alt="companyIcon" style="width: 20%; height: auto;">
+
         <ol>
             {% for company in companies %}
                 <!-- <li class="hr-item"> -->

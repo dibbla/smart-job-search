@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,6 +10,9 @@
 
     <h2>All HRs</h2>
     <div class="content-container">
+
+        <img src="{{ url_for('static', filename='hrs.png') }}" alt="hrsIcon" style="width: 20%; height: auto;">
+
         <ol>
             {% for hr_info in hrs %}
                 <!-- <li class="hr-item"> -->

@@ -8,7 +8,12 @@
     <a href="{{ url_for('main_routes.admin_dashboard') }}">Back</a>
 
     <h2>All Users</h2>
-    <div class="content-container">
+    <div class="content-container" style="
+        height: 750px;
+        width: 500px;">
+
+<img src="{{ url_for('static', filename='users.png') }}" alt="adminIcon" style="width: 20%; height: auto;">
+
         <ol>
             {% for user_info in users %}
                 <li class="user">
