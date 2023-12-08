@@ -613,14 +613,14 @@ def login():
             if user is None:
                 user = Admin.query.filter_by(Admin_Email=form.User_Email.data).first()
         print("User is:", user)
-        if user and isinstance(user, Admin):
-            if check_password_hash(user.Admin_Password, form.User_Password.data):
-                session['user_id'] = user.Admin_Email
-                session['user_type'] = 'admin'
-                flash('Logged in successfully.', 'success')
-                print('Logged in successfully.')
-                print(session['user_id'], session['user_type'])
-                return redirect(url_for('main_routes.index'))          
+        # if user and isinstance(user, Admin):
+        #     if check_password_hash(user.Admin_Password, form.User_Password.data):
+        #         session['user_id'] = user.Admin_Email
+        #         session['user_type'] = 'admin'
+        #         flash('Logged in successfully.', 'success')
+        #         print('Logged in successfully.')
+        #         print(session['user_id'], session['user_type'])
+        #         return redirect(url_for('main_routes.index'))          
 
         try:
             if user and check_password_hash(user.User_Password, form.User_Password.data):
@@ -631,13 +631,22 @@ def login():
                 print(session['user_id'], session['user_type'])
                 return redirect(url_for('main_routes.index'))
         except:
-            if user and check_password_hash(user.HR_Password, form.User_Password.data):
-                session['user_id'] = user.HR_Email
-                session['user_type'] = 'user' if isinstance(user, User) else 'hr'
-                flash('Logged in successfully.', 'success')
-                print('Logged in successfully.')
-                print(session['user_id'], session['user_type'])
-                return redirect(url_for('main_routes.index'))
+            try:
+                if user and check_password_hash(user.HR_Password, form.User_Password.data):
+                    session['user_id'] = user.HR_Email
+                    session['user_type'] = 'user' if isinstance(user, User) else 'hr'
+                    flash('Logged in successfully.', 'success')
+                    print('Logged in successfully.')
+                    print(session['user_id'], session['user_type'])
+                    return redirect(url_for('main_routes.index'))
+            except:
+                if check_password_hash(user.Admin_Password, form.User_Password.data):
+                    session['user_id'] = user.Admin_Email
+                    session['user_type'] = 'admin'
+                    flash('Logged in successfully.', 'success')
+                    print('Logged in successfully.')
+                    print(session['user_id'], session['user_type'])
+                    return redirect(url_for('main_routes.index'))
         else:
             print(HR.query.all())
             print(User.query.all())
