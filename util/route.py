@@ -12,10 +12,11 @@ main_routes = Blueprint('main_routes', __name__)
 # Main page
 @main_routes.route('/')
 def index():
-    print(HR.query.all())
-    print(User.query.all())
-    print(Company.query.all())
-    print(Admin.query.all())
+    # print(HR.query.all())
+    # print(User.query.all())
+    # print(Company.query.all())
+    # print(Admin.query.all())
+    print(session.get('user_id'), session.get('user_type'))
     return render_template('index.html')
 
 @main_routes.route('/smart_search', methods=['GET'])
@@ -287,7 +288,7 @@ def delete_company(company_id):
 @main_routes.route('/hr_dashboard')
 def hr_dashboard():
     # Check if the user is logged in and is an HR
-    if 'user_id' not in session or session['user_type'] != 'hr' or session['user_type'] != 'admin':
+    if 'user_id' not in session or (session['user_type'] != 'hr' and session['user_type'] != 'admin'):
         flash('You are not authorized to access this page.', 'danger')
         print('You are not authorized to access this page.')
         return redirect(url_for('main_routes.index'))
@@ -418,7 +419,7 @@ def apply_job(job_id):
 @main_routes.route('/user_dashboard')
 def user_dashboard():
     # Check if the user is logged in
-    if 'user_id' not in session or session['user_type'] != 'user' or session['user_type']!= 'admin':
+    if 'user_id' not in session or (session['user_type'] != 'user' and session['user_type']!= 'admin'):
         print('You are not logged in.')
         flash('You need to log in to access the user dashboard.', 'danger')
         return redirect(url_for('main_routes.login'))

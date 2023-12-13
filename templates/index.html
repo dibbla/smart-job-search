@@ -14,18 +14,18 @@
         <div class="links">
             {% if 'user_type' in session and session['user_type'] == 'user' %}
                 <a href="/jobs">Jobs</a>
-                <a href="/user_dashboard">Dashboard</a>
+                <a href="/user_dashboard">User Dashboard</a>
                 <a href="/smart_search">Smart Match</a>
                 <a href="/logout">Log Out</a>
             {% endif %}
             {% if 'user_type' in session and session['user_type'] == 'hr' %}
                 <a href="/jobs">Jobs</a>
-                <a href="/hr_dashboard">Dashboard</a>
+                <a href="/hr_dashboard">HR Dashboard</a>
                 <a href="/logout">Log Out</a>
             {% endif %}
             {% if 'user_type' in session and session['user_type'] == 'admin' %}
                 <!-- <a href="/jobs">Jobs</a> -->
-                <a href="/admin_dashboard">Dashboard</a>
+                <a href="/admin_dashboard">Admin Dashboard</a>
                 <a href="/logout">Log Out</a>
             {% endif %}
             {% if 'user_type'  not in session%}
