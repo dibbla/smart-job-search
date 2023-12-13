@@ -35,7 +35,7 @@
                     </div>
                     <div class="job-link" style="text-align: right;">
                         {% if 'user_type' in session and session['user_type'] == 'user' %}
-                            <a href="{{ url_for('main_routes.apply_job', job_id=job_info['job'].Job_ID) }}">Apply</a>
+                        <a href="{{ url_for('main_routes.apply_job', job_id=job_info['job'].Job_ID, source='page2') }}">Apply</a>
                         {% endif %}
                     </div>
                 </li>
