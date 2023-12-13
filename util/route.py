@@ -1,4 +1,5 @@
 import uuid
+import pickle
 from flask import Blueprint, render_template, redirect, url_for, flash, session, request
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -16,7 +17,8 @@ def index():
     # print(User.query.all())
     # print(Company.query.all())
     # print(Admin.query.all())
-    print(session.get('user_id'), session.get('user_type'))
+
+    print(session.get('user_id'), session.get('user_type'), session.get('search_result'))
     return render_template('index.html')
 
 @main_routes.route('/smart_search', methods=['GET'])
@@ -82,6 +84,7 @@ def smart_search_result():
             job_data.append(job_info)
 
         print(job_data)
+        session['search_result'] = pickle.dumps(job_data)
 
         return render_template('smart_search_result.html', jobs=job_data)
 
@@ -413,8 +416,12 @@ def apply_job(job_id):
         flash('Application submitted successfully.', 'success')
     else:
         flash('You have already applied to this job.', 'danger')
-
-    return redirect(url_for('main_routes.jobs'))
+    source_page = request.args.get('source')
+    print("SOURCE PAGE:", source_page)
+    if source_page == 'page1':
+        return redirect(url_for('main_routes.jobs'))
+    if source_page == 'page2':
+        return render_template('smart_search_result.html', jobs=pickle.loads(session['search_result']))
 
 @main_routes.route('/user_dashboard')
 def user_dashboard():
@@ -667,6 +674,7 @@ def logout():
     # Clear user information from the session
     session.pop('user_id', None)
     session.pop('user_type', None)
+    session.pop('search_result', None)
     flash('Logged out successfully.', 'success')
     print('Logged out successfully.')
     return redirect(url_for('main_routes.index'))

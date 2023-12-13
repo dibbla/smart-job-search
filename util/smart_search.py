@@ -1,7 +1,7 @@
 import re
 
 import zhipuai
-zhipuai.api_key = ""
+zhipuai.api_key = "" 
 
 def get_response(prompt):
     response = zhipuai.model_api.sse_invoke(
